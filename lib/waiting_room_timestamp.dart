@@ -37,7 +37,10 @@ class _WaitingRoomTimestampState extends State<WaitingRoomTimestamp> {
 
   @override
   Widget build(BuildContext context) {
-    final formattedTime = _currentTime.toString().split('.')[0];
+    final formattedTime =
+        '${_currentTime.hour.toString().padLeft(2, '0')}:'
+        '${_currentTime.minute.toString().padLeft(2, '0')}:'
+        '${_currentTime.second.toString().padLeft(2, '0')}';
 
     return Text(
       'Current Time: $formattedTime',
