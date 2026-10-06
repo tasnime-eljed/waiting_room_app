@@ -1,0 +1,908 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Documentation TP2 - Waiting Room App</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    :root {
+      --ink: #17212b;
+      --muted: #647180;
+      --line: #d8dee6;
+      --soft: #f4f7f9;
+      --teal: #0f766e;
+      --teal-soft: #dff4f0;
+      --amber: #b7791f;
+      --amber-soft: #fff3d8;
+      --blue: #2457a6;
+      --blue-soft: #eaf1ff;
+      --green: #256d3c;
+      --green-soft: #e8f5ec;
+      --code-bg: #101820;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #e7ebef;
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.42;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      padding: 17mm 16mm 14mm;
+      background: #ffffff;
+      position: relative;
+      page-break-after: always;
+      overflow: hidden;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 7mm;
+      margin-bottom: 9mm;
+      color: var(--muted);
+      font-size: 10.5pt;
+    }
+
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 3px 10px;
+      background: var(--teal-soft);
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 9.5pt;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      line-height: 1.12;
+    }
+
+    h1 {
+      font-size: 32pt;
+      color: #101820;
+      letter-spacing: 0;
+      max-width: 150mm;
+    }
+
+    h2 {
+      font-size: 21pt;
+      margin-bottom: 6mm;
+      color: #101820;
+    }
+
+    h3 {
+      font-size: 13.5pt;
+      margin-bottom: 2.5mm;
+      color: #1e2b36;
+    }
+
+    p {
+      margin: 0 0 4.5mm;
+      font-size: 11.2pt;
+    }
+
+    .subtitle {
+      margin-top: 7mm;
+      font-size: 14pt;
+      color: var(--muted);
+      max-width: 165mm;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+      margin-top: 14mm;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 5mm;
+      background: #ffffff;
+    }
+
+    .panel.soft {
+      background: var(--soft);
+      border-color: transparent;
+    }
+
+    .panel.teal {
+      background: var(--teal-soft);
+      border-color: #b7e3dc;
+    }
+
+    .panel.amber {
+      background: var(--amber-soft);
+      border-color: #f1d9a7;
+    }
+
+    .panel.blue {
+      background: var(--blue-soft);
+      border-color: #c9d8fb;
+    }
+
+    .panel.green {
+      background: var(--green-soft);
+      border-color: #c9e6d2;
+    }
+
+    .panel-title {
+      margin: 0 0 2mm;
+      color: var(--muted);
+      font-size: 9.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .panel-value {
+      font-size: 12pt;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .list {
+      margin: 0;
+      padding-left: 5.5mm;
+      font-size: 10.8pt;
+    }
+
+    .list li {
+      margin-bottom: 2.7mm;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3mm;
+      margin: 5mm 0 7mm;
+    }
+
+    .flow .step {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 4mm;
+      min-height: 25mm;
+      position: relative;
+    }
+
+    .flow .step strong {
+      display: block;
+      color: var(--teal);
+      margin-bottom: 1.5mm;
+      font-size: 10pt;
+    }
+
+    .flow .step span {
+      font-size: 9.5pt;
+      color: var(--ink);
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9.4pt;
+    }
+
+    pre {
+      margin: 3mm 0 5mm;
+      padding: 4mm;
+      border-radius: 8px;
+      background: var(--code-bg);
+      color: #ecf4ff;
+      font-size: 8.8pt;
+      line-height: 1.34;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+
+    .small {
+      font-size: 9.7pt;
+      color: var(--muted);
+    }
+
+    .callout {
+      border-left: 4px solid var(--teal);
+      padding: 3.5mm 4.5mm;
+      background: var(--soft);
+      margin: 5mm 0;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.2pt;
+      margin-top: 3mm;
+    }
+
+    .table th,
+    .table td {
+      border: 1px solid var(--line);
+      padding: 3mm;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    .table th {
+      background: var(--soft);
+      color: #1e2b36;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 9mm;
+      left: 16mm;
+      right: 16mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      padding-top: 3mm;
+      font-size: 9pt;
+      color: var(--muted);
+    }
+
+    .toc {
+      margin-top: 8mm;
+      display: grid;
+      gap: 3mm;
+    }
+
+    .toc-row {
+      display: grid;
+      grid-template-columns: 11mm 1fr;
+      gap: 3mm;
+      align-items: start;
+    }
+
+    .toc-num {
+      width: 9mm;
+      height: 9mm;
+      border-radius: 999px;
+      background: var(--teal);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9pt;
+      font-weight: 700;
+    }
+
+    .toc-text strong {
+      display: block;
+      font-size: 11.5pt;
+      margin-bottom: 1mm;
+    }
+
+    .toc-text span {
+      display: block;
+      font-size: 10pt;
+      color: var(--muted);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 2mm 3mm;
+      border-radius: 6px;
+      background: var(--green-soft);
+      color: var(--green);
+      font-weight: 700;
+      font-size: 10pt;
+    }
+
+    .note {
+      font-size: 9.4pt;
+      color: var(--muted);
+      margin-top: 3mm;
+    }
+
+    .spacer {
+      height: 5mm;
+    }
+  </style>
+</head>
+<body>
+  <section class="page">
+    <div class="topline">
+      <span>TP2 - Documentation technique</span>
+      <span class="badge">Flutter</span>
+    </div>
+
+    <h1>Waiting Room App</h1>
+    <p class="subtitle">
+      Documentation du TP2 : application Flutter de gestion locale d'une salle d'attente,
+      avec tests unitaires, tests widgets et integration continue GitHub Actions.
+    </p>
+
+    <div class="meta-grid">
+      <div class="panel teal">
+        <div class="panel-title">Objectif du TP</div>
+        <div class="panel-value">Ajouter, afficher et supprimer des clients dans une file d'attente locale.</div>
+      </div>
+      <div class="panel blue">
+        <div class="panel-title">Validation</div>
+        <div class="panel-value">Tests automatises + analyse statique du code.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Fichiers principaux</div>
+        <div class="panel-value">lib/main.dart<br>lib/waiting_room_manager.dart</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Fichiers de test et CI</div>
+        <div class="panel-value">test/waiting_room_manager_test.dart<br>test/waiting_room_widget_test.dart<br>.github/workflows/ci.yml</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>
+        Le projet separe la logique metier de l'interface. La classe
+        <code>WaitingRoomManager</code> garde la liste des clients, tandis que
+        <code>WaitingRoomScreen</code> affiche cette liste et declenche les actions utilisateur.
+      </p>
+    </div>
+
+    <h3>Plan du document</h3>
+    <div class="toc">
+      <div class="toc-row">
+        <div class="toc-num">1</div>
+        <div class="toc-text"><strong>Architecture generale</strong><span>Organisation de l'application et flux utilisateur.</span></div>
+      </div>
+      <div class="toc-row">
+        <div class="toc-num">2</div>
+        <div class="toc-text"><strong>Logique metier</strong><span>Role de <code>waiting_room_manager.dart</code>.</span></div>
+      </div>
+      <div class="toc-row">
+        <div class="toc-num">3</div>
+        <div class="toc-text"><strong>Interface Flutter</strong><span>Role de <code>main.dart</code> et gestion de l'etat.</span></div>
+      </div>
+      <div class="toc-row">
+        <div class="toc-num">4</div>
+        <div class="toc-text"><strong>Tests automatises</strong><span>Tests unitaires et tests widgets.</span></div>
+      </div>
+      <div class="toc-row">
+        <div class="toc-num">5</div>
+        <div class="toc-text"><strong>Integration continue</strong><span>Pipeline GitHub Actions et resultats de validation.</span></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 1</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topline">
+      <span>Architecture generale</span>
+      <span class="badge">Vue d'ensemble</span>
+    </div>
+
+    <h2>Fonctionnement global</h2>
+    <p>
+      L'application represente une salle d'attente locale. L'utilisateur saisit le nom d'un client,
+      clique sur le bouton <code>Add</code>, puis le client apparait dans la liste. Chaque client
+      affiche aussi une icone de suppression pour sortir de la file.
+    </p>
+
+    <div class="flow">
+      <div class="step">
+        <strong>1. Saisie</strong>
+        <span>Le nom est entre dans le widget <code>TextField</code>.</span>
+      </div>
+      <div class="step">
+        <strong>2. Action</strong>
+        <span>Le bouton <code>ElevatedButton</code> appelle la methode <code>_addClient()</code>.</span>
+      </div>
+      <div class="step">
+        <strong>3. Logique</strong>
+        <span><code>WaitingRoomManager</code> ajoute ou supprime un nom dans la liste.</span>
+      </div>
+      <div class="step">
+        <strong>4. Affichage</strong>
+        <span><code>setState()</code> reconstruit l'interface et met a jour le compteur.</span>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="panel soft">
+        <h3>Responsabilite de la logique</h3>
+        <ul class="list">
+          <li>Stocker la liste des clients en memoire.</li>
+          <li>Ajouter un client avec <code>addClient</code>.</li>
+          <li>Supprimer un client avec <code>removeClient</code>.</li>
+          <li>Exposer la liste avec le getter <code>clients</code>.</li>
+        </ul>
+      </div>
+      <div class="panel soft">
+        <h3>Responsabilite de l'interface</h3>
+        <ul class="list">
+          <li>Afficher le champ de saisie, le bouton, le compteur et la liste.</li>
+          <li>Lire le texte saisi avec <code>TextEditingController</code>.</li>
+          <li>Mettre a jour l'ecran avec <code>setState()</code>.</li>
+          <li>Afficher un bouton de suppression pour chaque client.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <h3>Choix technique important</h3>
+    <p>
+      Le projet utilise une liste locale <code>List&lt;String&gt;</code>. Cela suffit pour ce TP, car
+      l'objectif est de comprendre la gestion d'etat locale, les tests et le CI. Il n'y a pas de base
+      de donnees ni d'appel reseau : les donnees existent seulement pendant l'execution de l'application.
+    </p>
+
+    <table class="table">
+      <tr>
+        <th>Element</th>
+        <th>Role</th>
+        <th>Pourquoi c'est important</th>
+      </tr>
+      <tr>
+        <td><code>WaitingRoomManager</code></td>
+        <td>Gere la liste des clients.</td>
+        <td>Permet de tester la logique sans lancer l'interface Flutter.</td>
+      </tr>
+      <tr>
+        <td><code>WaitingRoomScreen</code></td>
+        <td>Affiche et modifie la salle d'attente.</td>
+        <td>Relie les actions utilisateur aux methodes du manager.</td>
+      </tr>
+      <tr>
+        <td>Tests</td>
+        <td>Verifient l'ajout, la suppression et l'affichage.</td>
+        <td>Reduisent le risque de regression.</td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 2</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topline">
+      <span>lib/waiting_room_manager.dart</span>
+      <span class="badge">Logique metier</span>
+    </div>
+
+    <h2>Gestionnaire de salle d'attente</h2>
+    <p>
+      Le fichier <code>waiting_room_manager.dart</code> contient la classe responsable de la liste des
+      clients. Cette classe est volontairement simple : elle ne depend pas de Flutter, donc elle peut
+      etre testee avec des tests unitaires rapides.
+    </p>
+
+<pre><code>class WaitingRoomManager {
+  final List&lt;String&gt; _clients = [];
+
+  List&lt;String&gt; get clients =&gt; _clients;
+
+  void addClient(String name) {
+    _clients.add(name);
+  }
+
+  void removeClient(String name) {
+    _clients.remove(name);
+  }
+}</code></pre>
+
+    <div class="two-col">
+      <div class="panel teal">
+        <h3>Attribut prive</h3>
+        <p>
+          <code>_clients</code> est une liste privee. Le caractere <code>_</code> indique que cette
+          variable est interne au fichier en Dart.
+        </p>
+      </div>
+      <div class="panel blue">
+        <h3>Getter public</h3>
+        <p>
+          <code>clients</code> permet a l'interface et aux tests de lire la liste actuelle pour afficher
+          les noms et compter les elements.
+        </p>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <table class="table">
+      <tr>
+        <th>Methode</th>
+        <th>Action</th>
+        <th>Exemple dans le projet</th>
+      </tr>
+      <tr>
+        <td><code>addClient(String name)</code></td>
+        <td>Ajoute le nom a la fin de la liste.</td>
+        <td>Utilisee quand l'utilisateur clique sur <code>Add</code>.</td>
+      </tr>
+      <tr>
+        <td><code>removeClient(String name)</code></td>
+        <td>Supprime le premier element correspondant au nom.</td>
+        <td>Utilisee quand l'utilisateur clique sur l'icone de suppression.</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <p>
+        Point important : cette classe represente le coeur logique du TP. En la separant de l'interface,
+        on peut valider le comportement de la file d'attente sans tester les widgets graphiques.
+      </p>
+    </div>
+
+    <h3>Limite volontaire du TP</h3>
+    <p>
+      Le getter retourne directement la liste interne. Pour un projet plus avance, on pourrait retourner
+      une copie non modifiable afin d'eviter qu'un autre fichier modifie la liste sans passer par les
+      methodes du manager. Pour ce TP, la version actuelle reste lisible et suffisante.
+    </p>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 3</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topline">
+      <span>lib/main.dart</span>
+      <span class="badge">Interface Flutter</span>
+    </div>
+
+    <h2>Application et ecran principal</h2>
+    <p>
+      Le fichier <code>main.dart</code> lance l'application et construit l'interface. Il contient
+      <code>WaitingRoomApp</code>, qui configure le <code>MaterialApp</code>, puis
+      <code>WaitingRoomScreen</code>, qui gere l'ecran interactif.
+    </p>
+
+<pre><code>void main() {
+  runApp(const WaitingRoomApp());
+}
+
+class WaitingRoomApp extends StatelessWidget {
+  const WaitingRoomApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(home: WaitingRoomScreen());
+  }
+}</code></pre>
+
+    <div class="two-col">
+      <div class="panel soft">
+        <h3>Pourquoi un StatefulWidget ?</h3>
+        <p>
+          La liste des clients change pendant l'execution. L'ecran doit donc garder un etat local :
+          le manager, le texte saisi et la liste affichee.
+        </p>
+      </div>
+      <div class="panel soft">
+        <h3>Role de setState()</h3>
+        <p>
+          Quand un client est ajoute ou supprime, <code>setState()</code> indique a Flutter de reconstruire
+          l'interface pour montrer la nouvelle liste.
+        </p>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <h3>Ajout d'un client</h3>
+<pre><code>void _addClient() {
+  if (_controller.text.isNotEmpty) {
+    setState(() {
+      _manager.addClient(_controller.text);
+      _controller.clear();
+    });
+  }
+}</code></pre>
+
+    <p>
+      Cette methode evite d'ajouter un nom vide, transmet le texte au manager, puis vide le champ de
+      saisie. Le compteur <code>Clients in Queue: ...</code> est mis a jour car l'interface est reconstruite.
+    </p>
+
+    <table class="table">
+      <tr>
+        <th>Widget</th>
+        <th>Fonction dans l'ecran</th>
+      </tr>
+      <tr>
+        <td><code>TextField</code></td>
+        <td>Permet de saisir le nom du client.</td>
+      </tr>
+      <tr>
+        <td><code>ElevatedButton</code></td>
+        <td>Declenche l'ajout du client.</td>
+      </tr>
+      <tr>
+        <td><code>Text</code></td>
+        <td>Affiche le nombre de clients dans la file.</td>
+      </tr>
+      <tr>
+        <td><code>ListView.builder</code></td>
+        <td>Construit dynamiquement une carte pour chaque client.</td>
+      </tr>
+      <tr>
+        <td><code>IconButton</code></td>
+        <td>Supprime le client associe a la ligne.</td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 4</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topline">
+      <span>test/waiting_room_manager_test.dart</span>
+      <span class="badge">Tests unitaires</span>
+    </div>
+
+    <h2>Validation de la logique metier</h2>
+    <p>
+      Les tests unitaires verifient directement <code>WaitingRoomManager</code>. Ils ne lancent pas
+      l'interface graphique : ils testent seulement le comportement attendu de la liste.
+    </p>
+
+    <div class="two-col">
+      <div class="panel green">
+        <h3>Test d'ajout</h3>
+        <ul class="list">
+          <li>Creer un manager vide.</li>
+          <li>Ajouter <code>John Doe</code>.</li>
+          <li>Verifier que la liste contient 1 client.</li>
+          <li>Verifier que le premier client est <code>John Doe</code>.</li>
+        </ul>
+      </div>
+      <div class="panel amber">
+        <h3>Test de suppression</h3>
+        <ul class="list">
+          <li>Creer un manager.</li>
+          <li>Ajouter <code>John Doe</code> puis <code>Jane Doe</code>.</li>
+          <li>Supprimer <code>John Doe</code>.</li>
+          <li>Verifier qu'il reste seulement <code>Jane Doe</code>.</li>
+        </ul>
+      </div>
+    </div>
+
+<pre><code>test('should add a client to the waiting list', () {
+  final manager = WaitingRoomManager();
+  manager.addClient('John Doe');
+
+  expect(manager.clients.length, 1);
+  expect(manager.clients.first, 'John Doe');
+});</code></pre>
+
+    <h3>Methode Arrange - Act - Assert</h3>
+    <table class="table">
+      <tr>
+        <th>Etape</th>
+        <th>Explication</th>
+        <th>Exemple</th>
+      </tr>
+      <tr>
+        <td>Arrange</td>
+        <td>Preparer les donnees du test.</td>
+        <td>Creer <code>WaitingRoomManager</code>.</td>
+      </tr>
+      <tr>
+        <td>Act</td>
+        <td>Executer l'action a tester.</td>
+        <td>Appeler <code>addClient</code> ou <code>removeClient</code>.</td>
+      </tr>
+      <tr>
+        <td>Assert</td>
+        <td>Verifier le resultat obtenu.</td>
+        <td>Utiliser <code>expect(...)</code>.</td>
+      </tr>
+    </table>
+
+    <div class="callout">
+      <p>
+        Ces tests prouvent que la couche logique fonctionne seule. Si un probleme apparait dans l'interface,
+        on sait que le manager a deja une base verifiee.
+      </p>
+    </div>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 5</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topline">
+      <span>test/waiting_room_widget_test.dart</span>
+      <span class="badge">Tests widgets</span>
+    </div>
+
+    <h2>Validation de l'interface utilisateur</h2>
+    <p>
+      Les tests widgets verifient l'application comme un utilisateur : ils demarrent le widget,
+      simulent une saisie, cliquent sur les boutons et inspectent ce qui est affiche a l'ecran.
+    </p>
+
+    <div class="three-col">
+      <div class="panel soft">
+        <h3>pumpWidget</h3>
+        <p>Construit l'application dans l'environnement de test.</p>
+      </div>
+      <div class="panel soft">
+        <h3>enterText</h3>
+        <p>Simule la saisie d'un nom dans le champ texte.</p>
+      </div>
+      <div class="panel soft">
+        <h3>tap + pump</h3>
+        <p>Simule le clic puis force la reconstruction de l'interface.</p>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <h3>Scenario 1 : ajouter Alice</h3>
+<pre><code>await tester.pumpWidget(const WaitingRoomApp());
+await tester.enterText(find.byType(TextField), 'Alice');
+await tester.tap(find.byType(ElevatedButton));
+await tester.pump();
+
+expect(find.text('Alice'), findsOneWidget);
+expect(find.text('Clients in Queue: 1'), findsOneWidget);</code></pre>
+
+    <h3>Scenario 2 : supprimer Bob</h3>
+    <p>
+      Le test ajoute d'abord <code>Bob</code>, clique sur l'icone <code>Icons.delete</code>, puis verifie
+      que le nom n'existe plus dans l'ecran et que le compteur revient a zero.
+    </p>
+
+    <table class="table">
+      <tr>
+        <th>Verification</th>
+        <th>Resultat attendu</th>
+      </tr>
+      <tr>
+        <td><code>find.text('Alice')</code></td>
+        <td>Un seul widget affiche le nom apres l'ajout.</td>
+      </tr>
+      <tr>
+        <td><code>find.text('Clients in Queue: 1')</code></td>
+        <td>Le compteur augmente apres l'ajout.</td>
+      </tr>
+      <tr>
+        <td><code>find.text('Bob')</code></td>
+        <td>Aucun widget ne contient Bob apres suppression.</td>
+      </tr>
+      <tr>
+        <td><code>find.text('Clients in Queue: 0')</code></td>
+        <td>Le compteur revient a zero apres suppression.</td>
+      </tr>
+    </table>
+
+    <p class="note">
+      Note : le projet contient aussi <code>test/waiting_room_card_test.dart</code>, qui verifie l'affichage
+      du composant <code>WaitingRoomCard</code>. Ce test complete la couverture globale du projet.
+    </p>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 6</span>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="topline">
+      <span>.github/workflows/ci.yml</span>
+      <span class="badge">Integration continue</span>
+    </div>
+
+    <h2>Pipeline GitHub Actions</h2>
+    <p>
+      Le fichier <code>ci.yml</code> automatise la verification du projet a chaque modification envoyee
+      sur la branche <code>main</code>, ou lors d'une pull request vers <code>main</code>.
+    </p>
+
+<pre><code>on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+steps:
+  - uses: actions/checkout@v4
+  - uses: subosito/flutter-action@v2
+    with:
+      flutter-version: '3.47.4'
+  - run: flutter pub get
+  - run: flutter test
+  - run: flutter analyze</code></pre>
+
+    <div class="two-col">
+      <div class="panel blue">
+        <h3>Ce que le CI controle</h3>
+        <ul class="list">
+          <li>Recuperation du code avec <code>checkout</code>.</li>
+          <li>Installation de Flutter version <code>3.47.4</code>.</li>
+          <li>Installation des dependances du projet.</li>
+          <li>Execution de tous les tests automatises.</li>
+          <li>Analyse statique du code Dart.</li>
+        </ul>
+      </div>
+      <div class="panel green">
+        <h3>Resultats verifies localement</h3>
+        <p><span class="status">flutter test : tous les tests passent</span></p>
+        <p><span class="status">flutter analyze : aucun probleme trouve</span></p>
+        <p class="small">
+          Verification effectuee le 05/10/2026 dans le projet
+          <code>waiting_room_app</code>.
+        </p>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <h3>Conclusion</h3>
+    <p>
+      Le TP montre une application Flutter complete a petite echelle : une logique metier isolee,
+      une interface reactive, des tests unitaires, des tests widgets et une integration continue.
+      Le professeur peut lire les fichiers principaux en suivant cette progression :
+      d'abord le manager, ensuite l'ecran Flutter, puis les tests et enfin le workflow CI.
+    </p>
+
+    <table class="table">
+      <tr>
+        <th>Commande</th>
+        <th>Utilite</th>
+      </tr>
+      <tr>
+        <td><code>flutter test</code></td>
+        <td>Lance tous les tests du dossier <code>test/</code>.</td>
+      </tr>
+      <tr>
+        <td><code>flutter analyze</code></td>
+        <td>Controle la qualite statique du code Dart et Flutter.</td>
+      </tr>
+    </table>
+
+    <div class="footer">
+      <span>Waiting Room App - TP2</span>
+      <span>Page 7</span>
+    </div>
+  </section>
+</body>
+</html>
