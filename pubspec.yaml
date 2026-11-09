@@ -28,6 +28,14 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  provider: ^6.0.0
+  supabase_flutter: ^2.0.0
+  sqflite: ^2.3.0
+  path_provider: ^2.1.1
+  path: ^1.8.3
+  geolocator: ^11.0.0
+  uuid: ^4.0.0
+ 
   flutter:
     sdk: flutter
 
@@ -36,6 +44,9 @@ dependencies:
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
+  mockito: ^5.4.0
+  build_runner: ^2.4.0
+  sqflite_common_ffi: ^2.3.0+2
   flutter_test:
     sdk: flutter
 
