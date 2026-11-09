@@ -3,10 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:waiting_room_app/queue_provider.dart';
 
-
 const supabaseUrl = 'https://swccmnemljwtbxcdspqf.supabase.co';
 const supabaseAnonKey = 'sb_publishable_D0JU4M4Ej4p1RThA1ICtGA_sCzu_nrM';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +53,8 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final clients = context.watch<QueueProvider>().clients;
+    final provider = context.watch<QueueProvider>();
+    final clients = provider.clients;
 
     return Scaffold(
       appBar: AppBar(title: const Text('Waiting Room')),
@@ -80,6 +79,11 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
               ],
             ),
           ),
+          Text(
+            'Clients in Queue: ${clients.length}',
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
           Expanded(
             child: ListView.builder(
               itemCount: clients.length,
@@ -98,11 +102,21 @@ class _WaitingRoomScreenState extends State<WaitingRoomScreen> {
                         : '📍 ${(client['lat'] as num).toStringAsFixed(4)}, '
                               '${(client['lng'] as num).toStringAsFixed(4)}',
                   ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => context.read<QueueProvider>().deleteClient(
+                      client['id'] as String,
+                    ),
+                  ),
                 );
               },
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.read<QueueProvider>().serveNext(),
+        child: const Icon(Icons.skip_next),
       ),
     );
   }
